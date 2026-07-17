@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.smmmartparkversion1.RegisterController"
+      alignment="CENTER"
+      spacing="10"
+      prefWidth="350" prefHeight="420">
+
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <Label text="Create an Account"/>
+
+    <VBox spacing="8">
+        <Label text="Full Name:"/>
+        <TextField fx:id="fullNameField"/>
+
+        <Label text="Username:"/>
+        <TextField fx:id="usernameField"/>
+
+        <Label text="Password:"/>
+        <PasswordField fx:id="passwordField"/>
+
+        <Label text="Confirm Password:"/>
+        <PasswordField fx:id="confirmPasswordField"/>
+    </VBox>
+
+    <Label fx:id="registerErrorLabel"/>
+
+    <Button fx:id="registerButton" text="Register" onAction="#handleRegister" maxWidth="Infinity"/>
+
+    <Hyperlink fx:id="backToLoginLink" text="Already have an account? Log In" onAction="#handleBackToLogin"/>
+
+</VBox>

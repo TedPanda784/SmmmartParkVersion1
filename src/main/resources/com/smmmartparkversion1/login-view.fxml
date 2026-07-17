@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="300" prefWidth="350" spacing="12" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smmmartparkversion1.LoginController">
+
+    <padding>
+        <Insets bottom="30" left="30" right="30" top="30" />
+    </padding>
+
+    <Label styleClass="title-label" text="Smart Parking Login" />
+
+    <VBox spacing="8">
+        <Label text="Username:" />
+        <TextField fx:id="usernameField" />
+
+        <Label text="Password:" />
+        <PasswordField fx:id="passwordField" />
+    </VBox>
+
+    <Label fx:id="loginErrorLabel" styleClass="error-label" />
+
+    <Button fx:id="loginButton" maxWidth="Infinity" onAction="#handleLogin" text="Log In" />
+
+   <Hyperlink fx:id="registerLink" onAction="#handleGoToRegister" text="Don't have an Account? Register" />
+
+</VBox>

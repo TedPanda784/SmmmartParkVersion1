@@ -1,9 +1,9 @@
-package com.example.smmmartparkversion1;
+package com.smmmartparkversion1;
 
 import javafx.application.Application;
 
 public class Launcher {
     public static void main(String[] args) {
-        Application.launch(HelloApplication.class, args);
+        Application.launch(MainApplication.class, args);
     }
 }
