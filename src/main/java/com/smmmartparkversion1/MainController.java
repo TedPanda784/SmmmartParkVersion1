@@ -1,13 +1,19 @@
 package com.smmmartparkversion1;
 
-import com.smmmartparkversion1.model.*;
+import com.smmmartparkversion1.db.ParkingSessionRepository;
+import com.smmmartparkversion1.db.ParkingSlotRepository;
+import com.smmmartparkversion1.model.ParkingSession;
+import com.smmmartparkversion1.model.ParkingSlot;
+import com.smmmartparkversion1.model.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class MainController {
+
     @FXML private TextField plateField;
     @FXML private TextField ownerField;
     @FXML private ComboBox<String> vehicleTypeCombo;
@@ -21,53 +27,50 @@ public class MainController {
     @FXML private TableColumn<ParkingSession, String> timeInColumn;
     @FXML private TableColumn<ParkingSession, String> statusColumn;
 
-    // Shared in-memory repository for this run of the app
-    private final ParkingRepository repository = new ParkingRepository();
+    private final ParkingSlotRepository slotRepository = new ParkingSlotRepository();
+    private final ParkingSessionRepository sessionRepository = new ParkingSessionRepository();
 
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("MMM d, HH:mm");
 
+    // Set by MainApplication right after loading this screen, so we know who's logged in
+    private User currentUser;
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
     @FXML
     public void initialize() {
-        // Populate vehicle type choices
         vehicleTypeCombo.setItems(FXCollections.observableArrayList("Car", "Motorcycle", "Truck"));
 
-        // Seed a few example slots (no DB yet, so this is in-memory)
-        repository.addSlot(new ParkingSlot("A1", "Car"));
-        repository.addSlot(new ParkingSlot("A2", "Car"));
-        repository.addSlot(new ParkingSlot("B1", "Motorcycle"));
-        repository.addSlot(new ParkingSlot("B2", "Motorcycle"));
-        repository.addSlot(new ParkingSlot("C1", "Truck"));
-
-        slotCombo.setItems(repository.getSlots());
-
-        // Only offer slots that are available, refreshed whenever vehicle type changes
         vehicleTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> refreshAvailableSlots(newVal));
 
-        // Table column bindings
         plateColumn.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getVehicle().getPlateNumber()));
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getPlateNumber()));
         typeColumn.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getVehicle().getVehicleType()));
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getVehicleType()));
         slotColumn.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getSlot().getSlotId()));
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getSlotId()));
         timeInColumn.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(data.getValue().getTimeIn().format(TIME_FORMAT)));
         statusColumn.setCellValueFactory(data ->
                 new javafx.beans.property.SimpleStringProperty(data.getValue().isActive() ? "Parked" : "Completed"));
 
-        sessionTable.setItems(repository.getSessions());
+        refreshSessionTable();
+    }
+
+    private void refreshSessionTable() {
+        List<ParkingSession> sessions = sessionRepository.getAllSessions();
+        sessionTable.setItems(FXCollections.observableArrayList(sessions));
     }
 
     private void refreshAvailableSlots(String vehicleType) {
         if (vehicleType == null) {
-            slotCombo.setItems(repository.getSlots());
+            slotCombo.setItems(FXCollections.observableArrayList());
             return;
         }
-        slotCombo.setItems(FXCollections.observableArrayList(
-                repository.getSlots().stream()
-                        .filter(s -> s.getCompatibleVehicleType().equals(vehicleType) && !s.isOccupied())
-                        .toList()
-        ));
+        List<ParkingSlot> available = slotRepository.getAvailableSlotsByType(vehicleType);
+        slotCombo.setItems(FXCollections.observableArrayList(available));
     }
 
     @FXML
@@ -82,22 +85,17 @@ public class MainController {
             return;
         }
 
-        Vehicle vehicle = switch (type) {
-            case "Car" -> new Car(plate, owner);
-            case "Motorcycle" -> new Motorcycle(plate, owner);
-            case "Truck" -> new Truck(plate, owner);
-            default -> null;
-        };
+        boolean success = sessionRepository.parkVehicle(plate, owner, type, slot.getSlotId(),
+                currentUser != null ? currentUser.getUserId() : null);
 
-        if (vehicle == null) {
-            errorLabel.setText("Unrecognized vehicle type.");
-            return;
+        if (success) {
+            errorLabel.setText("");
+            handleClear();
+            refreshSessionTable();
+            refreshAvailableSlots(vehicleTypeCombo.getValue());
+        } else {
+            errorLabel.setText("Failed to park vehicle. Try again.");
         }
-
-        repository.parkVehicle(vehicle, slot);
-        errorLabel.setText("");
-        handleClear();
-        refreshAvailableSlots(vehicleTypeCombo.getValue());
     }
 
     @FXML
@@ -111,9 +109,9 @@ public class MainController {
             errorLabel.setText("This session has already ended.");
             return;
         }
-        repository.endSession(selected);
-        sessionTable.refresh();
+        sessionRepository.endSession(selected.getSessionId(), selected.getSlotId());
         errorLabel.setText("");
+        refreshSessionTable();
         refreshAvailableSlots(vehicleTypeCombo.getValue());
     }
 
@@ -126,4 +124,9 @@ public class MainController {
         errorLabel.setText("");
     }
 
+    @FXML
+    private void handleLogout() {
+        SessionManager.clearSession();
+        MainApplication.showLoginView();
+    }
 }

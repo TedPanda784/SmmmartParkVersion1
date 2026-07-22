@@ -1,5 +1,6 @@
 package com.smmmartparkversion1;
 
+import com.smmmartparkversion1.db.IUserRepository;
 import com.smmmartparkversion1.db.UserRepository;
 import com.smmmartparkversion1.model.User;
 import javafx.fxml.FXML;
@@ -19,7 +20,7 @@ public class RegisterController {
     @FXML private Button registerButton;
     @FXML private Hyperlink backToLoginLink;
 
-    private final UserRepository userRepository = new UserRepository();
+    private final IUserRepository userRepository = new UserRepository();
 
     @FXML
     private void handleRegister() {

@@ -15,7 +15,17 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
-        showLoginView();
+
+        User existingUser = SessionManager.loadSession();
+        if (existingUser != null) {
+            if (existingUser.isAdmin()) {
+                showAdminView(existingUser);
+            } else {
+                showCustomerView(existingUser);
+            }
+        } else {
+            showLoginView();
+        }
     }
 
     public static void showLoginView() {
@@ -27,14 +37,31 @@ public class MainApplication extends Application {
     }
 
     public static void showAdminView(User user) {
-        // Temporary: reuses the existing dashboard for now.
-        // We'll pass the logged-in user into MainController in Step 10.
-        loadScene("main-view.fxml", "Smart Parking - Admin Dashboard");
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
+            Scene scene = new Scene(loader.load());
+            MainController controller = loader.getController();
+            controller.setCurrentUser(user);
+            primaryStage.setTitle("Smart Parking - Admin Dashboard");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void showCustomerView(User user) {
-        // Placeholder until we build a dedicated customer screen in Step 10.
-        loadScene("main-view.fxml", "Smart Parking - Customer");
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("customer-view.fxml"));
+            Scene scene = new Scene(loader.load());
+            CustomerController controller = loader.getController();
+            controller.setCurrentUser(user);
+            primaryStage.setTitle("Smart Parking - Customer");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void loadScene(String fxmlFile, String title) {

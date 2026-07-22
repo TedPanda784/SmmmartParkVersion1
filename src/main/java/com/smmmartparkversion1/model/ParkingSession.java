@@ -3,36 +3,36 @@ package com.smmmartparkversion1.model;
 import java.time.LocalDateTime;
 
 public class ParkingSession {
-    private Vehicle vehicle;
-    private ParkingSlot slot;
+    private int sessionId;
+    private String plateNumber;
+    private String ownerName;
+    private String vehicleType;
+    private String slotId;
     private LocalDateTime timeIn;
-    private LocalDateTime timeOut; // null while still parked
+    private LocalDateTime timeOut;
+    private Integer userId;
 
-    public ParkingSession(Vehicle vehicle, ParkingSlot slot, LocalDateTime timeIn) {
-        this.vehicle = vehicle;
-        this.slot = slot;
+    public ParkingSession(int sessionId, String plateNumber, String ownerName, String vehicleType,
+                          String slotId, LocalDateTime timeIn, LocalDateTime timeOut, Integer userId) {
+        this.sessionId = sessionId;
+        this.plateNumber = plateNumber;
+        this.ownerName = ownerName;
+        this.vehicleType = vehicleType;
+        this.slotId = slotId;
         this.timeIn = timeIn;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public ParkingSlot getSlot() {
-        return slot;
-    }
-
-    public LocalDateTime getTimeIn() {
-        return timeIn;
-    }
-
-    public LocalDateTime getTimeOut() {
-        return timeOut;
-    }
-
-    public void setTimeOut(LocalDateTime timeOut) {
         this.timeOut = timeOut;
+        this.userId = userId;
     }
+
+    public int getSessionId() { return sessionId; }
+    public String getPlateNumber() { return plateNumber; }
+    public String getOwnerName() { return ownerName; }
+    public String getVehicleType() { return vehicleType; }
+    public String getSlotId() { return slotId; }
+    public LocalDateTime getTimeIn() { return timeIn; }
+    public LocalDateTime getTimeOut() { return timeOut; }
+    public void setTimeOut(LocalDateTime timeOut) { this.timeOut = timeOut; }
+    public Integer getUserId() { return userId; }
 
     public boolean isActive() {
         return timeOut == null;

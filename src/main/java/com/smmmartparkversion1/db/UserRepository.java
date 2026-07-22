@@ -4,9 +4,8 @@ import com.smmmartparkversion1.model.User;
 
 import java.sql.*;
 
-public class UserRepository {
+public class UserRepository implements IUserRepository {
 
-    // CREATE — used by Register
     public boolean createUser(User user) {
         String sql = "INSERT INTO users (username, password, role, full_name) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -29,7 +28,6 @@ public class UserRepository {
         }
     }
 
-    // READ — used by Login
     public User findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -55,7 +53,6 @@ public class UserRepository {
         }
     }
 
-    // UPDATE — e.g. editing full name or password later
     public boolean updateUser(User user) {
         String sql = "UPDATE users SET password = ?, full_name = ? WHERE user_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -73,7 +70,6 @@ public class UserRepository {
         }
     }
 
-    // DELETE — e.g. admin removing an account
     public boolean deleteUser(int userId) {
         String sql = "DELETE FROM users WHERE user_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();

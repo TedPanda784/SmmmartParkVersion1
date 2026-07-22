@@ -4,57 +4,63 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.smmmartparkversion1.MainController"
-            prefWidth="600" prefHeight="550">
+            stylesheets="@style.css"
+            prefWidth="700" prefHeight="600">
 
-    <VBox spacing="10" styleClass="form-box"
-          AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <padding>
-            <Insets top="15" right="15" bottom="15" left="15"/>
-        </padding>
+    <top>
+        <VBox spacing="10" styleClass="form-box">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
 
-        <Label text="Smart Parking" styleClass="title-label"/>
+            <Label text="Smart Parking" styleClass="title-label"/>
 
-        <GridPane hgap="10" vgap="10">
-            <columnConstraints>
-                <ColumnConstraints minWidth="120"/>
-                <ColumnConstraints minWidth="200"/>
-            </columnConstraints>
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="120"/>
+                    <ColumnConstraints minWidth="200"/>
+                </columnConstraints>
 
-            <Label text="Plate Number:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <TextField fx:id="plateField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Label text="Plate Number:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="plateField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="Owner Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <TextField fx:id="ownerField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Owner Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="ownerField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-            <Label text="Vehicle Type:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="vehicleTypeCombo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Vehicle Type:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="vehicleTypeCombo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="Slot:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="slotCombo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-        </GridPane>
+                <Label text="Slot:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="slotCombo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
 
-        <Label fx:id="errorLabel" styleClass="error-label"/>
+            <Label fx:id="errorLabel" styleClass="error-label"/>
 
-        <HBox spacing="10">
-            <Button fx:id="parkButton" text="Park Vehicle" onAction="#handleParkVehicle"/>
-            <Button fx:id="endSessionButton" text="End Session" onAction="#handleEndSession"/>
-            <Button fx:id="clearButton" text="Clear" onAction="#handleClear"/>
-        </HBox>
-    </VBox>
+            <HBox spacing="10">
+                <Button fx:id="parkButton" text="Park Vehicle" onAction="#handleParkVehicle"/>
+                <Button fx:id="endSessionButton" text="End Session" onAction="#handleEndSession"/>
+                <Button fx:id="clearButton" text="Clear" onAction="#handleClear"/>
+                <Button fx:id="logoutButton" text="Log Out" onAction="#handleLogout"/>
+            </HBox>
+        </VBox>
+    </top>
 
-    <TableView fx:id="sessionTable"
-               AnchorPane.topAnchor="230" AnchorPane.leftAnchor="15"
-               AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="15">
-        <columns>
-            <TableColumn fx:id="plateColumn" text="Plate Number" prefWidth="120"/>
-            <TableColumn fx:id="typeColumn" text="Type" prefWidth="90"/>
-            <TableColumn fx:id="slotColumn" text="Slot" prefWidth="80"/>
-            <TableColumn fx:id="timeInColumn" text="Time In" prefWidth="150"/>
-            <TableColumn fx:id="statusColumn" text="Status" prefWidth="90"/>
-        </columns>
-    </TableView>
+    <center>
+        <TableView fx:id="sessionTable">
+            <columns>
+                <TableColumn fx:id="plateColumn" text="Plate Number" prefWidth="120"/>
+                <TableColumn fx:id="typeColumn" text="Type" prefWidth="90"/>
+                <TableColumn fx:id="slotColumn" text="Slot" prefWidth="80"/>
+                <TableColumn fx:id="timeInColumn" text="Time In" prefWidth="150"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="90"/>
+            </columns>
+            <BorderPane.margin>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </BorderPane.margin>
+        </TableView>
+    </center>
 
-</AnchorPane>
+</BorderPane>

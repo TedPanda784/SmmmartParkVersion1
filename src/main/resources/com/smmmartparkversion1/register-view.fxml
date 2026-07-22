@@ -7,15 +7,16 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.smmmartparkversion1.RegisterController"
+      stylesheets="@style.css"
       alignment="CENTER"
       spacing="10"
-      prefWidth="350" prefHeight="420">
+      prefWidth="350" prefHeight="440">
 
     <padding>
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
 
-    <Label text="Create an Account"/>
+    <Label text="Create an Account" styleClass="title-label"/>
 
     <VBox spacing="8">
         <Label text="Full Name:"/>
@@ -31,7 +32,7 @@
         <PasswordField fx:id="confirmPasswordField"/>
     </VBox>
 
-    <Label fx:id="registerErrorLabel"/>
+    <Label fx:id="registerErrorLabel" styleClass="error-label"/>
 
     <Button fx:id="registerButton" text="Register" onAction="#handleRegister" maxWidth="Infinity"/>
 

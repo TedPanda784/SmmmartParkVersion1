@@ -4,7 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="300" prefWidth="350" spacing="12" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smmmartparkversion1.LoginController">
+<VBox alignment="CENTER" prefHeight="330" prefWidth="350" spacing="12"
+      stylesheets="@style.css"
+      xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smmmartparkversion1.LoginController">
 
     <padding>
         <Insets bottom="30" left="30" right="30" top="30" />

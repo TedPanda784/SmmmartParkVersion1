@@ -1,5 +1,6 @@
 package com.smmmartparkversion1;
 
+import com.smmmartparkversion1.db.IUserRepository;
 import com.smmmartparkversion1.db.UserRepository;
 import com.smmmartparkversion1.model.User;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ public class LoginController {
     @FXML private Button loginButton;
     @FXML private Hyperlink registerLink;
 
-    private final UserRepository userRepository = new UserRepository();
+    private final IUserRepository userRepository = new UserRepository();
 
     @FXML
     private void handleLogin() {
@@ -42,6 +43,8 @@ public class LoginController {
         }
 
         loginErrorLabel.setText("");
+
+        SessionManager.createSession(user);
 
         if (user.isAdmin()) {
             MainApplication.showAdminView(user);
